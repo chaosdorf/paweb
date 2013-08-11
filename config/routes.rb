@@ -1,8 +1,9 @@
 require 'pulseaudio'
 
 Paweb::Application.routes.draw do
-  root "volumes#index"
+  get "volumes" => "volumes#index"
   get "volumes/events"
+  root "web_ui#index"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
