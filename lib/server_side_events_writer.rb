@@ -1,5 +1,7 @@
 require 'json'
 
+# Code from http://tenderlovemaking.com/2012/07/30/is-it-live.html
+
 class ServerSideEventsWriter
   def initialize io
     @io = io
