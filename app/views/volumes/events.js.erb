@@ -1,0 +1,7 @@
+<% @playback_streams.each do |index, stream| %>
+  $("input[data-playback-stream='<%= index %>']").val(<%= stream[:volume][0] %>);
+<% end %>
+
+<% @sinks.each do |index, sink| %>
+  $("input[data-sink='<%= index %>']").val(<%= sink[:volume][0] %>);
+<% end %>

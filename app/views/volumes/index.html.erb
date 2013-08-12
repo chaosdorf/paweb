@@ -1,2 +1,9 @@
-<h1>Volumes#index</h1>
-<p>Find me in app/views/volumes/index.html.erb</p>
+<% @playback_streams.each do |index, stream| %>
+<p>Playback Stream: <%= stream[:application] %> by <%= stream[:user] %> on <%= stream[:host] %></p>
+<input data-playback-stream="<%= index %>" type="range" min="0" max="65535" value="<%= stream[:volume][0] %>">
+<% end %>
+
+<% @sinks.each do |index, sink| %>
+<p>Sink: <%= sink[:description] %></p>
+<input data-sink="<%= index %>" type="range" min="0" max="65535" value="<%= sink [:volume][0] %>">
+<% end %>

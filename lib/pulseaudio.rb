@@ -29,9 +29,26 @@ class PulseAudio
   def fetch_playback_streams
     playback_streams = {}
     @pulseaudio_core_interface['PlaybackStreams'].each do |stream_path|
-      playback_streams[stream_path] = fetch_playback_stream(stream_path)
+      stream_index = extract_index_from_path(stream_path)
+      playback_streams[stream_index] = fetch_playback_stream(stream_path)
     end
     playback_streams
+  end
+  
+  def set_playback_stream_volume(index, volume)
+    stream_path = "/org/pulseaudio/core1/playback_stream#{index}"
+    stream_object = @pulseaudio_service.object(stream_path)
+    stream_object.introspect
+    stream_interface = stream_object['org.PulseAudio.Core1.Stream']
+    stream_interface['Volume'] = DBus.variant('au', [volume, volume])
+  end
+
+  def set_sink_volume(index, volume)
+    sink_path = "/org/pulseaudio/core1/sink#{index}"
+    sink_object = @pulseaudio_service.object(sink_path)
+    sink_object.introspect
+    sink_interface = sink_object['org.PulseAudio.Core1.Device']
+    sink_interface['Volume'] = DBus.variant('au', [volume, volume])
   end
 
   def fetch_sink(sink_path)
@@ -49,7 +66,8 @@ class PulseAudio
   def fetch_sinks
     sinks = {}
     @pulseaudio_core_interface['Sinks'].each do |sink_path|
-      sinks[sink_path] = fetch_sink(sink_path)
+      sink_index = extract_index_from_path(sink_path)
+      sinks[sink_index] = fetch_sink(sink_path)
     end
     sinks
   end
@@ -63,5 +81,10 @@ class PulseAudio
         properties[name] = bytes_without_null_byte.pack('C*')
       end
       properties
+    end
+    
+    def extract_index_from_path(path)
+      matches = /\d+$/.match(path)
+      return matches[0]
     end
 end

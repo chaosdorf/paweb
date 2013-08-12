@@ -14,3 +14,23 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+$(document).ready(function() {
+  setTimeout(function() {
+    var source = new EventSource('/volumes/events');
+    source.addEventListener('js', function(e) {
+      var payload = JSON.parse(e.data);
+      eval(payload['code']);
+    });
+  }, 1);
+
+  $('[data-playback-stream]').on('change', function() {  
+    var id = $(this).attr('data-playback-stream');
+    $.ajax({url: '/volumes/playback_streams/' + id, data: {volume: $(this).val()}, type: 'PUT'});
+  });
+  
+  $('[data-sink]').on('change', function() {  
+    var id = $(this).attr('data-sink');
+    $.ajax({url: '/volumes/sinks/' + id, data: {volume: $(this).val()}, type: 'PUT'});
+  });
+});

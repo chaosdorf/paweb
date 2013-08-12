@@ -3,15 +3,28 @@ require 'server_side_events_writer'
 class VolumesController < ApplicationController
   include ActionController::Live
   
+  # render_to_string from AbstractController::Rendering, because render_to_string from ActionController::Rendering breaks live streaming
+  def render_to_string(*args, &block)
+    options = _normalize_render(*args, &block)
+    render_to_body(options)
+  end
+  
   def index
     pulseaudio = PulseAudio.new('tcp:host=localhost,port=24883')
-    playback_streams = pulseaudio.fetch_playback_streams
-    sinks = pulseaudio.fetch_sinks
-
-    render json: {
-      playback_streams: playback_streams,
-      sinks: sinks,
-    }
+    @playback_streams = pulseaudio.fetch_playback_streams
+    @sinks = pulseaudio.fetch_sinks
+  end
+  
+  def update_playback_stream
+    pulseaudio = PulseAudio.new('tcp:host=localhost,port=24883')
+    pulseaudio.set_playback_stream_volume(params[:id].to_i, params[:volume].to_i)
+    render nothing: true
+  end
+  
+  def update_sinks
+    pulseaudio = PulseAudio.new('tcp:host=localhost,port=24883')
+    pulseaudio.set_sink_volume(params[:id].to_i, params[:volume].to_i)
+    render nothing: true
   end
 
   def events
@@ -21,12 +34,12 @@ class VolumesController < ApplicationController
     
     begin
       loop do
-        playback_streams = pulseaudio.fetch_playback_streams
-        sinks = pulseaudio.fetch_sinks
+        @playback_streams = pulseaudio.fetch_playback_streams
+        @sinks = pulseaudio.fetch_sinks
         server_side_events_writer.write(
-          { playback_streams: playback_streams, sinks: sinks }, 
-          { event: 'volumes' })
-        sleep 0.5
+          { code: render_to_string('events.js.erb') }, 
+          { event: 'js' })
+          sleep 0.5
       end
     rescue IOError
     ensure

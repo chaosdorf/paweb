@@ -3,7 +3,9 @@ require 'pulseaudio'
 Paweb::Application.routes.draw do
   get "volumes" => "volumes#index"
   get "volumes/events"
-  root "web_ui#index"
+  put "volumes/playback_streams/:id" => "volumes#update_playback_stream"
+  put "volumes/sinks/:id" => "volumes#update_sinks"
+  root to: redirect('/volumes')
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
