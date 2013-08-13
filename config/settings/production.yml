@@ -1,0 +1,1 @@
+pulseaudio_server: 'tcp:host=hyperion,port=24883'
