@@ -41,3 +41,4 @@ gem 'puma'
 # gem 'debugger', group: [:development, :test]
 
 gem 'ruby-dbus'
+gem 'rails_config'

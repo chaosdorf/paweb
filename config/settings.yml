@@ -1,0 +1,1 @@
+pulseaudio_server: 'tcp:host=localhost,port=24883'

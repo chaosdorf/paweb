@@ -10,19 +10,19 @@ class VolumesController < ApplicationController
   end
   
   def index
-    pulseaudio = PulseAudio.new('tcp:host=localhost,port=24883')
+    pulseaudio = PulseAudio.new(Settings.pulseaudio_server)
     @playback_streams = pulseaudio.fetch_playback_streams
     @sinks = pulseaudio.fetch_sinks
   end
   
   def update_playback_stream
-    pulseaudio = PulseAudio.new('tcp:host=localhost,port=24883')
+    pulseaudio = PulseAudio.new(Settings.pulseaudio_server)
     pulseaudio.set_playback_stream_volume(params[:id].to_i, params[:volume].to_i)
     render nothing: true
   end
   
   def update_sinks
-    pulseaudio = PulseAudio.new('tcp:host=localhost,port=24883')
+    pulseaudio = PulseAudio.new(Settings.pulseaudio_server)
     pulseaudio.set_sink_volume(params[:id].to_i, params[:volume].to_i)
     render nothing: true
   end
@@ -30,7 +30,7 @@ class VolumesController < ApplicationController
   def events
     response.headers['Content-Type'] = 'text/event-stream'
     server_side_events_writer = ServerSideEventsWriter.new(response.stream)
-    pulseaudio = PulseAudio.new('tcp:host=localhost,port=24883')
+    pulseaudio = PulseAudio.new(Settings.pulseaudio_server)
     
     begin
       loop do
