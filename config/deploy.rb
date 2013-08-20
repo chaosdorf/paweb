@@ -16,7 +16,7 @@ namespace :deploy do
   task :start do ; end
   task :stop do ; end
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "sudo /usr/bin/systemctl restart paweb.service"
+    run "touch #{File.join(current_path,'tmp','restart.txt')}"
   end
 end
 
