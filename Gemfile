@@ -20,4 +20,4 @@ gem 'jquery-rails'
 
 gem 'ruby-dbus'
 gem 'rails_config'
-gem 'capistrano'
+gem 'capistrano', group: :development
