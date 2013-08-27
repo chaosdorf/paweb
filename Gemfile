@@ -18,26 +18,6 @@ gem 'coffee-rails'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder'
-
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# Use Capistrano for deployment
-# gem 'capistrano', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-
 gem 'ruby-dbus'
 gem 'rails_config'
 gem 'capistrano'
